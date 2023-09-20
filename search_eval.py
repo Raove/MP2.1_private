@@ -37,8 +37,8 @@ class InL2Ranker(metapy.index.RankingFunction):
         N = sd.num_docs
         ctD = sd.doc_term_count
         ctC = sd.corpus_term_count
-        tfn = ctD * math.log2(1 + (avgdl / abs(D)))
-        score = sd.query_term_weight * (tfn / (tfn + ctC)) * math.log2((N + 1) / (ctC + 0.5))
+        tfn = ctD * math.log(1 + (avgdl / abs(D)), 2)
+        score = sd.query_term_weight * (tfn / (tfn + ctC)) * math.log((N + 1) / (ctC + 0.5),2)
         
         return score
         # return (self.param + sd.doc_term_count) / (self.param * sd.doc_unique_terms + sd.doc_size)
