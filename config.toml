@@ -17,5 +17,7 @@ query-path = "cranfield-queries.txt"
 query-id-start = 1
 
 [ranker]
-method = "dirichlet-prior"
-mu = 2000.0
+method = "bm25"
+k1 = 1.2
+b = 0.75
+k3 = 500
