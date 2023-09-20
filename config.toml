@@ -15,3 +15,7 @@ filter = "default-unigram-chain"
 [query-runner]
 query-path = "cranfield-queries.txt"
 query-id-start = 1
+
+[ranker]
+method = "dirichlet-prior"
+mu = 2000.0
