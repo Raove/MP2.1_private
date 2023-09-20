@@ -20,8 +20,28 @@ class InL2Ranker(metapy.index.RankingFunction):
         For fields available in the score_data sd object,
         @see https://meta-toolkit.org/doxygen/structmeta_1_1index_1_1score__data.html
         """
-        return (self.param + sd.doc_term_count) / (self.param * sd.doc_unique_terms + sd.doc_size)
-
+        score = 0
+        # Q = "query"
+        # D = "document"
+        # t = "term"
+        # N = "number of docs in corpus C"
+        # avgdl = "length"
+        # c > 0
+        # C = "corpus"
+        # ctD = "query term count"
+        # ctC = "number of times term t appears in the corpus"
+        
+        D = sd.doc_size
+        t = sd.t_id
+        avgdl = sd.avg_dl
+        N = sd.num_docs
+        ctD = sd.doc_term_count
+        ctC = sd.corpus_term_count
+        tfn = ctD * math.log2(1 + (avgdl / abs(D)))
+        score = sd.query_term_weight * (tfn / (tfn + ctC)) * math.log2((N + 1) / (ctC + 0.5))
+        
+        return score
+        # return (self.param + sd.doc_term_count) / (self.param * sd.doc_unique_terms + sd.doc_size)
 
 def load_ranker(cfg_file):
     """
@@ -29,7 +49,8 @@ def load_ranker(cfg_file):
     The parameter to this function, cfg_file, is the path to a
     configuration file used to load the index. You can ignore this for MP2.
     """
-    return metapy.index.JelinekMercer()
+    return InL2Ranker()
+    # return metapy.index.JelinekMercer()
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
